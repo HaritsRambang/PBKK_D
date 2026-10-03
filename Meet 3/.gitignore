@@ -7,16 +7,6 @@
 **/bin/
 **/obj/
 
-# Learning materials and local archives
-*.pdf
-*.zip
-*.doc
-*.docx
-*.ppt
-*.pptx
-*.xls
-*.xlsx
-
 # Temporary and diagnostic files
 *.log
 *.tmp

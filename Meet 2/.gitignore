@@ -1,0 +1,29 @@
+# Visual Studio and .NET
+.vs/
+**/bin/
+**/obj/
+
+# User-specific Visual Studio files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build and test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.log
+
+# NuGet packages and generated files
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/README.md
