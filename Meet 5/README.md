@@ -1,7 +1,7 @@
 # Meet 5 - Student Registration Manager dengan MVVM
 
-**Nama :** Leyan Harits R W  
-**NRP  :** 5025231288
+**Nama**  : Leyan Harits R W  
+**NRP**   : 5025231288
 
 Meet 5 merupakan kelanjutan langsung dari Meet 4. Aplikasi registrasi mahasiswa dan fitur intinya tetap dipertahankan, kemudian struktur program dipisahkan menggunakan pola **Model-View-ViewModel (MVVM)**. Perubahan ini membuat kode lebih terorganisasi tanpa mengubah hubungan antara form, data mahasiswa, dan operasi CRUD.
 
