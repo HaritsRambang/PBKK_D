@@ -102,30 +102,6 @@ Meet 5/
     └── StudentRegistrationApp.csproj
 ```
 
-## Menjalankan Project
-
-VS Code sudah cukup untuk mengedit XAML/C# dan menjalankan project karena .NET SDK serta Windows Desktop Runtime tersedia.
-
-```powershell
-cd "D:\SEMESTER 7\PBKK D\Meet 5\StudentRegistrationApp"
-dotnet build
-dotnet run
-```
-
-Visual Studio tidak wajib. Visual Studio hanya memberikan XAML Designer dan preview visual tambahan. Project dapat dibuka melalui `StudentRegistrationApp.csproj` jika ingin menggunakan Visual Studio.
-
-## Skenario Pengujian
-
-| No. | Skenario | Hasil Pengujian |
-| --- | --- | --- |
-| 1 | Menyimpan data pertama | Data masuk ke DataGrid dan pesan berhasil muncul. |
-| 2 | Menyimpan data kedua | Counter berubah menjadi dua mahasiswa. |
-| 3 | Menyimpan data ketiga | Data ketiga tampil dan counter menjadi tiga mahasiswa. |
-| 4 | Memilih data pada tabel | Data terpilih dimuat kembali ke form. |
-| 5 | Mengubah data lalu menekan `Update` | Pesan berhasil diperbarui muncul dan data tabel berubah. |
-| 6 | Menekan `Hapus Data Terpilih` | Dialog konfirmasi penghapusan muncul. |
-| 7 | Menekan `Yes` | Data terpilih terhapus dan counter berkurang menjadi dua. |
-
 ## Dokumentasi Uji Coba
 
 ### 1. Menyimpan Data Pertama
