@@ -20,7 +20,6 @@ Proyek ini dikerjakan untuk mata kuliah **PBKK (Kelas D)**, berbasis **.NET (WPF
 | 2 | Achmad Najwa M | 5025231265 |
 | 3 | Derryell Josua E P | 5025241175 |
 
-<!-- Hapus baris yang tidak diperlukan jika anggota kurang dari 3 orang. -->
 
 ---
 
@@ -59,7 +58,6 @@ Proyek ini dikerjakan untuk mata kuliah **PBKK (Kelas D)**, berbasis **.NET (WPF
 4. Memberi **transparansi**: status dan riwayat penanganan setiap laporan dapat dilihat.
 5. Menerapkan struktur kode yang rapi (MVVM + lapisan service) agar mudah diuji dan dikembangkan.
 
-> Dokumen kebutuhan lengkap ada pada **PRD AksesKita** (dikerjakan terpisah). Bagian [Kesesuaian dengan PRD](#12-kesesuaian-dengan-prd) menjelaskan apa yang sudah dan belum tercakup.
 
 ---
 
@@ -341,7 +339,6 @@ Pada eksekusi pertama, database diisi otomatis dengan **6 kategori** dan **18 la
 
 ## 11. Keamanan dan Keterbatasan
 
-Bagian ini sengaja ditulis apa adanya agar tidak menimbulkan salah paham.
 
 **Yang sudah diterapkan**
 
@@ -380,21 +377,9 @@ Rincian status terhadap kebutuhan fungsional pada PRD:
 | F-13 | Mode gelap/terang | ❌ Belum | Sebagai gantinya tersedia pengaturan **Ukuran** tampilan |
 | F-14 | Log aktivitas | ✅ Selesai | Riwayat perubahan status dan nama pengubahnya |
 
-**Penyesuaian dari PRD:** PRD menyebut platform web responsif dengan tanda *[SESUAIKAN]*. Implementasi ini disesuaikan menjadi **aplikasi desktop WPF berbasis .NET** dengan SQLite, dan peta memakai ubin Esri pada Leaflet (PRD menyebut contoh OpenStreetMap).
 
 ---
 
-## 13. Pengembangan Lanjutan
-
-- Autentikasi sungguhan: registrasi, login dengan kata sandi ter-*hash* (BCrypt), dan hak akses per pengguna.
-- Pelapor dapat mengubah laporan miliknya selama belum diverifikasi; aturan transisi status dan catatan wajib saat ditolak.
-- Pelacakan laporan tanpa login memakai kode tiket, pagination, dan filter tanggal.
-- Pemilihan titik lokasi langsung dengan klik di peta dan tombol "GPS Saya".
-- Mode gelap/terang, notifikasi status, serta peta panas (*heatmap*) lokasi rawan.
-- Pengujian otomatis untuk lapisan service.
-- Versi web/mobile dan integrasi dengan kanal pengaduan pemerintah daerah.
-
----
 
 <p align="center">
   AksesKita · Proyek PBKK Kelas D · Kota Surabaya
