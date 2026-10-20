@@ -1,0 +1,245 @@
+<UserControl x:Class="AksesKita.Desktop.Views.ReportDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#F1F5F9">
+    <Grid>
+        <!-- Empty state -->
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Visibility="{Binding HasReport, Converter={StaticResource InvBoolToVis}}">
+            <TextBlock Text="📄" FontSize="40" HorizontalAlignment="Center"/>
+            <TextBlock Text="Belum ada laporan untuk ditampilkan" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource Ink}" Margin="0,8,0,4" HorizontalAlignment="Center"/>
+            <TextBlock Text="Buat laporan baru atau pilih salah satu dari Daftar &amp; Manajemen Laporan." Style="{StaticResource CardSub}" HorizontalAlignment="Center"/>
+        </StackPanel>
+
+        <ScrollViewer Padding="24" VerticalScrollBarVisibility="Auto"
+                      Visibility="{Binding HasReport, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+
+                <!-- Breadcrumb + actions -->
+                <Grid Margin="0,0,0,14">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Style="{StaticResource GhostButton}" Content="← Daftar Laporan" Padding="12,6" Command="{Binding BackCommand}"/>
+                        <TextBlock VerticalAlignment="Center" Margin="12,0,0,0" FontSize="12.5" Foreground="{StaticResource Muted}">
+                            <Run Text="Detail Tiket "/><Run Text="{Binding Report.TicketCode, Mode=OneWay}" FontWeight="SemiBold"/>
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Style="{StaticResource GhostButton}" Content="⧉  Salin ID Tiket" Padding="12,6" Command="{Binding CopyTicketCommand}"/>
+                        <Button Style="{StaticResource GhostButton}" Content="🗺  Buka di Peta" Padding="12,6" Margin="8,0,0,0" Command="{Binding OpenMapCommand}"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Urgency banner -->
+                <Border CornerRadius="14" Padding="20,16" Margin="0,0,0,16" BorderThickness="1"
+                        Background="{Binding Report.Severity, Converter={StaticResource SeverityToTint}}"
+                        BorderBrush="{Binding Report.Severity, Converter={StaticResource SeverityToBrush}}">
+                    <Grid>
+                        <StackPanel>
+                            <TextBlock Text="{Binding BannerTitle}" FontWeight="Bold" FontSize="14" TextWrapping="Wrap" Margin="0,0,150,0"
+                                       Foreground="{Binding Report.Severity, Converter={StaticResource SeverityToBrush}}"/>
+                            <TextBlock Text="{Binding BannerSubtitle}" FontSize="12" Foreground="#475569" Margin="0,4,150,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <Border Background="White" CornerRadius="8" Padding="11,6" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding SlaText}" FontSize="11.5" FontWeight="SemiBold" Foreground="#334155"/>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Header card -->
+                <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                    <StackPanel>
+                        <WrapPanel Margin="0,0,0,10">
+                            <Border Background="#E0F2FE" CornerRadius="7" Padding="9,4" Margin="0,0,8,4">
+                                <TextBlock Text="{Binding Report.TicketCode}" FontSize="11.5" FontWeight="SemiBold" Foreground="#0369A1"/>
+                            </Border>
+                            <Border Background="#F1F5F9" CornerRadius="7" Padding="9,4" Margin="0,0,8,4">
+                                <TextBlock Text="{Binding Report.Category.Name}" FontSize="11.5" FontWeight="SemiBold" Foreground="#475569"/>
+                            </Border>
+                            <Border CornerRadius="7" Padding="9,4" Margin="0,0,8,4"
+                                    Background="{Binding Report.Severity, Converter={StaticResource SeverityToTint}}">
+                                <TextBlock FontSize="11.5" FontWeight="SemiBold"
+                                           Foreground="{Binding Report.Severity, Converter={StaticResource SeverityToBrush}}">
+                                    <Run Text="Urgensi "/><Run Text="{Binding Report.Severity, Mode=OneWay}"/>
+                                </TextBlock>
+                            </Border>
+                            <Border CornerRadius="7" Padding="9,4" Margin="0,0,0,4"
+                                    Background="{Binding Report.Status, Converter={StaticResource StatusToTint}}">
+                                <TextBlock Text="{Binding Report.Status, Converter={StaticResource EnumLabel}}" FontSize="11.5" FontWeight="SemiBold"
+                                           Foreground="{Binding Report.Status, Converter={StaticResource StatusToBrush}}"/>
+                            </Border>
+                        </WrapPanel>
+
+                        <TextBlock Text="{Binding Report.Title}" FontSize="22" FontWeight="Bold" Foreground="{StaticResource Ink}" TextWrapping="Wrap"/>
+                        <TextBlock Margin="0,6,0,14" Style="{StaticResource CardSub}">
+                            <Run Text="📍 "/><Run Text="{Binding Report.Address, Mode=OneWay}"/>
+                        </TextBlock>
+
+                        <Border Background="#F1F5F9" CornerRadius="10" Padding="16">
+                            <UniformGrid Columns="4">
+                                <StackPanel>
+                                    <TextBlock Text="Tanggal Pelaporan" FontSize="11" Foreground="{StaticResource Muted}"/>
+                                    <TextBlock Text="{Binding CreatedText}" FontSize="12.5" FontWeight="SemiBold" Foreground="#334155" TextWrapping="Wrap"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Pelapor" FontSize="11" Foreground="{StaticResource Muted}"/>
+                                    <TextBlock Text="{Binding ReporterDisplay}" FontSize="12.5" FontWeight="SemiBold" Foreground="#334155" TextWrapping="Wrap"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Instansi Berwenang" FontSize="11" Foreground="{StaticResource Muted}"/>
+                                    <TextBlock Text="Dinas PU Bina Marga Kota Surabaya" FontSize="12.5" FontWeight="SemiBold" Foreground="#334155" TextWrapping="Wrap"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Validasi Lokasi" FontSize="11" Foreground="{StaticResource Muted}"/>
+                                    <TextBlock Text="✓ Koordinat GPS tercatat" FontSize="12.5" FontWeight="SemiBold" Foreground="#16A34A"/>
+                                </StackPanel>
+                            </UniformGrid>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left -->
+                    <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="Bukti Hambatan Lapangan" Style="{StaticResource CardTitle}"/>
+                                <Border Height="260" CornerRadius="12" ClipToBounds="True" Margin="0,12,0,0"
+                                        Visibility="{Binding Report.ImagePath, Converter={StaticResource FileExistsToVis}}">
+                                    <Image Source="{Binding Report.ImagePath}" Stretch="UniformToFill"/>
+                                </Border>
+                                <Border Height="120" Background="#F8FAFC" BorderBrush="#CBD5E1" BorderThickness="1.5" CornerRadius="12" Margin="0,12,0,0"
+                                        Visibility="{Binding Report.ImagePath, Converter={StaticResource FileExistsToVis}, ConverterParameter=invert}">
+                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <TextBlock Text="📷" FontSize="28" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Pelapor tidak melampirkan foto" FontSize="12" Foreground="{StaticResource Muted}" Margin="0,6,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="Deskripsi &amp; Kajian Dampak Fisik" Style="{StaticResource CardTitle}"/>
+                                <Border Background="#F1F5F9" CornerRadius="10" Padding="16" Margin="0,12,0,0">
+                                    <TextBlock Text="{Binding Report.Description}" FontSize="13" Foreground="#334155" TextWrapping="Wrap" LineHeight="20"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                            <StackPanel>
+                                <Grid>
+                                    <TextBlock Text="Lokasi Geospasial" Style="{StaticResource CardTitle}" VerticalAlignment="Center"/>
+                                    <Button Style="{StaticResource GhostButton}" Content="Buka di Peta Interaktif" Padding="12,6"
+                                            HorizontalAlignment="Right" Command="{Binding OpenMapCommand}"/>
+                                </Grid>
+                                <Border Background="#E0F2FE" CornerRadius="12" Padding="16" Margin="0,12,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="KOORDINAT TERPASANG" Style="{StaticResource EyebrowText}"/>
+                                        <TextBlock Text="{Binding CoordinateText}" FontSize="16" FontWeight="Bold" Foreground="#0369A1" Margin="0,4,0,0"/>
+                                        <TextBlock Text="{Binding Report.Address}" FontSize="12" Foreground="#475569" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Report.SupportCount}" FontSize="30" FontWeight="Bold" Foreground="{StaticResource Navy}" VerticalAlignment="Center" Margin="0,0,14,0"/>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="Warga Mengalami Hambatan Ini" FontWeight="SemiBold" Foreground="{StaticResource Ink}"/>
+                                    <TextBlock Text="Dukungan warga mempercepat eskalasi prioritas pengerjaan dinas terkait." Style="{StaticResource CardSub}"/>
+                                </StackPanel>
+                                <Button Grid.Column="2" Style="{StaticResource PrimaryButton}" Content="👍  Saya Mengalami Hal Serupa (+1)"
+                                        Command="{Binding AddSupportCommand}" Margin="14,0,0,0" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Right -->
+                    <StackPanel Grid.Column="1">
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                            <StackPanel>
+                                <Grid>
+                                    <TextBlock Text="Riwayat Penanganan" Style="{StaticResource CardTitle}"/>
+                                    <TextBlock Text="Transparansi Publik" FontSize="11" Foreground="#0369A1" HorizontalAlignment="Right"/>
+                                </Grid>
+                                <ItemsControl ItemsSource="{Binding Timeline}" Margin="0,14,0,0">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,0,0,16">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Ellipse Grid.Column="0" Width="11" Height="11" Fill="{Binding Color}" VerticalAlignment="Top" Margin="0,4,12,0"/>
+                                                <StackPanel Grid.Column="1">
+                                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="12.5" Foreground="{StaticResource Ink}" TextWrapping="Wrap"/>
+                                                    <TextBlock Text="{Binding Time}" FontSize="11" Foreground="{StaticResource Muted}"/>
+                                                    <TextBlock Text="{Binding Detail}" FontSize="12" Foreground="#475569" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                                                    <TextBlock Text="{Binding Actor}" FontSize="11" Foreground="#0369A1" Margin="0,3,0,0" TextWrapping="Wrap"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Admin panel -->
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,16"
+                                Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
+                                <Grid>
+                                    <TextBlock Text="Aksi Petugas Verifikator" Style="{StaticResource CardTitle}"/>
+                                    <Border Background="{StaticResource Navy}" CornerRadius="6" Padding="8,2" HorizontalAlignment="Right">
+                                        <TextBlock Text="Staf Login" FontSize="10.5" FontWeight="Bold" Foreground="White"/>
+                                    </Border>
+                                </Grid>
+                                <TextBlock Text="Perbarui progres pengerjaan lapangan untuk memberi notifikasi otomatis kepada pelapor dan dasbor publik."
+                                           Style="{StaticResource CardSub}" Margin="0,4,0,12"/>
+
+                                <TextBlock Text="Pilih Status Penanganan Terbaru" FontWeight="SemiBold" FontSize="12.5" Foreground="#334155" Margin="0,0,0,5"/>
+                                <ComboBox ItemsSource="{Binding StatusOptions}" SelectedItem="{Binding SelectedStatus}" Padding="9,7">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource EnumLabel}}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+
+                                <TextBlock Text="Catatan Resmi Tindak Lanjut Dinas" FontWeight="SemiBold" FontSize="12.5" Foreground="#334155" Margin="0,12,0,5"/>
+                                <TextBox Style="{StaticResource FormInput}" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}"
+                                         Height="80" TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top"/>
+
+                                <Button Style="{StaticResource PrimaryButton}" Content="➤  Simpan &amp; Kirim Notifikasi Publik"
+                                        Command="{Binding SaveStatusCommand}" Margin="0,14,0,0"/>
+                                <Button Style="{StaticResource GhostButton}" Content="🗑  Hapus Laporan Ini" Foreground="#DC2626"
+                                        Command="{Binding DeleteReportCommand}" Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="{Binding StatusMessage}" FontSize="12" Foreground="#0E7490" TextWrapping="Wrap" Margin="2,0,0,12"/>
+
+                        <Border Style="{StaticResource Card}" Background="#F0F9FF" BorderBrush="#BAE6FD" Padding="16">
+                            <StackPanel>
+                                <TextBlock Text="Posko Akses Surabaya" FontWeight="SemiBold" FontSize="13" Foreground="{StaticResource Ink}"/>
+                                <TextBlock Text="Hubungi Command Center Surabaya: 112" FontSize="12" Foreground="{StaticResource Muted}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

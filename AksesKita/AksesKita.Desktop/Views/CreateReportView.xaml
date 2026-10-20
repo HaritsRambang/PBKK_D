@@ -1,0 +1,191 @@
+<UserControl x:Class="AksesKita.Desktop.Views.CreateReportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#F1F5F9">
+    <ScrollViewer Padding="24" VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+
+            <Border Style="{StaticResource Card}" Background="#EEF2FF" BorderBrush="#C7D2FE" Margin="0,0,0,18">
+                <StackPanel>
+                    <TextBlock Text="Hambatan Mengancam Keselamatan Jiwa?" FontWeight="Bold" FontSize="13.5" Foreground="#3730A3"/>
+                    <TextBlock Text="Jika terdapat lubang galian terbuka, robohan tiang, atau kabel listrik di jalur pedestrian, segera hubungi Command Center Surabaya 112."
+                               Style="{StaticResource CardSub}" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,18">
+                <StackPanel>
+                    <TextBlock Text="FORMULIR PELAPORAN WARGA" Style="{StaticResource EyebrowText}"/>
+                    <TextBlock Text="Buat Laporan Hambatan Aksesibilitas" FontSize="22" FontWeight="Bold" Foreground="{StaticResource Ink}" Margin="0,4,0,0"/>
+                    <TextBlock Text="Lengkapi formulir di bawah. Laporan akan tersimpan dan masuk ke antrean verifikasi petugas Kota Surabaya."
+                               Style="{StaticResource CardSub}" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left column -->
+                <StackPanel Grid.Column="0" Margin="0,0,16,0">
+
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="1. Kategori Fasilitas Terhambat" Style="{StaticResource CardTitle}" FontSize="16"/>
+                            <TextBlock Text="Pilih jenis fasilitas publik yang mengalami kendala mobilitas fisik:" Style="{StaticResource CardSub}" Margin="0,3,0,12"/>
+                            <ListBox ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}"
+                                     BorderThickness="0" Background="Transparent"
+                                     ItemContainerStyle="{StaticResource SelectCard}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate><UniformGrid Columns="3"/></ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Icon}" FontSize="22"/>
+                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13" Foreground="{StaticResource Ink}" Margin="0,6,0,2" TextWrapping="Wrap"/>
+                                            <TextBlock Text="{Binding Description}" FontSize="11" Foreground="{StaticResource Muted}" TextWrapping="Wrap"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="2. Tingkat Hambatan Terhadap Mobilitas" Style="{StaticResource CardTitle}" FontSize="16"/>
+                            <TextBlock Text="Kriteria keparahan menentukan kecepatan eskalasi perbaikan dinas teknis:" Style="{StaticResource CardSub}" Margin="0,3,0,12"/>
+                            <ListBox ItemsSource="{Binding SeverityOptions}" SelectedItem="{Binding SelectedSeverity}"
+                                     BorderThickness="0" Background="Transparent"
+                                     ItemContainerStyle="{StaticResource SelectCard}"
+                                     HorizontalContentAlignment="Stretch"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="0,0,0,0">
+                                            <Grid>
+                                                <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="13.5" TextWrapping="Wrap" Margin="0,0,120,0"
+                                                           Foreground="{Binding Level, Converter={StaticResource SeverityToBrush}}"/>
+                                                <Border HorizontalAlignment="Right" VerticalAlignment="Top" CornerRadius="8" Padding="9,3"
+                                                        Background="{Binding Level, Converter={StaticResource SeverityToTint}}">
+                                                    <TextBlock Text="{Binding Badge}" FontSize="10.5" FontWeight="SemiBold"
+                                                               Foreground="{Binding Level, Converter={StaticResource SeverityToBrush}}"/>
+                                                </Border>
+                                            </Grid>
+                                            <TextBlock Text="{Binding Description}" FontSize="11.5" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="3. Rincian Laporan Hambatan" Style="{StaticResource CardTitle}" FontSize="16"/>
+
+                            <Grid Margin="0,14,0,5">
+                                <TextBlock Text="Judul Ringkas Hambatan *" FontWeight="SemiBold" Foreground="#334155"/>
+                                <TextBlock Text="{Binding TitleCounter}" FontSize="11.5" Foreground="{StaticResource Muted}" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <TextBox Style="{StaticResource FormInput}" MaxLength="100"
+                                     Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <Grid Margin="0,14,0,5">
+                                <TextBlock Text="Deskripsi Kondisi &amp; Dampak Mobilitas *" FontWeight="SemiBold" Foreground="#334155"/>
+                                <TextBlock Text="{Binding DescriptionCounter}" FontSize="11.5" Foreground="{StaticResource Muted}" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <TextBox Style="{StaticResource FormInput}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                     Height="120" TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Right column -->
+                <StackPanel Grid.Column="1">
+
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="4. Titik Lokasi Presisi" Style="{StaticResource CardTitle}" FontSize="16"/>
+                            <TextBlock Text="Pilih lokasi cepat di Surabaya atau isi alamat dan koordinat sendiri." Style="{StaticResource CardSub}" Margin="0,3,0,12"/>
+
+                            <TextBlock Text="Lokasi Cepat (Surabaya)" FontWeight="SemiBold" FontSize="12.5" Foreground="#334155" Margin="0,0,0,5"/>
+                            <ComboBox ItemsSource="{Binding Landmarks}" SelectedItem="{Binding SelectedLandmark}"
+                                      DisplayMemberPath="Name" Padding="9,7"/>
+
+                            <TextBlock Text="Alamat / Patokan Terdekat *" FontWeight="SemiBold" FontSize="12.5" Foreground="#334155" Margin="0,12,0,5"/>
+                            <TextBox Style="{StaticResource FormInput}" Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}"
+                                     TextWrapping="Wrap" AcceptsReturn="True" MinHeight="64" VerticalContentAlignment="Top"/>
+
+                            <Grid Margin="0,12,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Latitude" FontWeight="SemiBold" FontSize="12.5" Foreground="#334155" Margin="0,0,0,5"/>
+                                    <TextBox Style="{StaticResource FormInput}" Text="{Binding LatitudeText, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Longitude" FontWeight="SemiBold" FontSize="12.5" Foreground="#334155" Margin="0,0,0,5"/>
+                                    <TextBox Style="{StaticResource FormInput}" Text="{Binding LongitudeText, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="5. Foto Bukti Lapangan" Style="{StaticResource CardTitle}" FontSize="16"/>
+                            <TextBlock Text="Format JPG atau PNG, maksimal 5 MB." Style="{StaticResource CardSub}" Margin="0,3,0,12"/>
+
+                            <Border Height="150" Background="#F8FAFC" BorderBrush="#CBD5E1" BorderThickness="1.5" CornerRadius="12" ClipToBounds="True"
+                                    Visibility="{Binding ImagePath, Converter={StaticResource FileExistsToVis}, ConverterParameter=invert}">
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock Text="📷" FontSize="30" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Belum ada foto dipilih" FontSize="12" Foreground="{StaticResource Muted}" HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Height="150" CornerRadius="12" ClipToBounds="True"
+                                    Visibility="{Binding ImagePath, Converter={StaticResource FileExistsToVis}}">
+                                <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
+                            </Border>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                <Button Style="{StaticResource GhostButton}" Content="Pilih Foto..." Command="{Binding PickPhotoCommand}" Padding="14,8"/>
+                                <Button Style="{StaticResource GhostButton}" Content="Hapus" Command="{Binding RemovePhotoCommand}" Padding="14,8" Margin="8,0,0,0"
+                                        Visibility="{Binding ImagePath, Converter={StaticResource FileExistsToVis}}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="6. Privasi &amp; Validasi Pelapor" Style="{StaticResource CardTitle}" FontSize="16"/>
+                            <Border Background="#F1F5F9" CornerRadius="10" Padding="14" Margin="0,12,0,0">
+                                <CheckBox IsChecked="{Binding IsAnonymous}" Foreground="#334155">
+                                    <StackPanel>
+                                        <TextBlock Text="Laporkan Secara Anonim" FontWeight="SemiBold" FontSize="13"/>
+                                        <TextBlock Text="Nama dan identitas Anda disamarkan dari portal dan peta publik." FontSize="11.5" Foreground="{StaticResource Muted}" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </CheckBox>
+                            </Border>
+
+                            <TextBlock Text="{Binding StatusMessage}" Foreground="#DC2626" FontSize="12.5" Margin="0,14,0,0" TextWrapping="Wrap"/>
+
+                            <Button Style="{StaticResource PrimaryButton}" Content="➤  Kirim Laporan Hambatan"
+                                    Command="{Binding SubmitReportCommand}" Margin="0,14,0,0"/>
+                            <TextBlock Text="Setiap laporan diverifikasi dalam waktu maksimal 1×24 jam kerja sesuai standar layanan publik inklusif."
+                                       FontSize="11" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,10,0,0" TextAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

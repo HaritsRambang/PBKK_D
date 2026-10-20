@@ -1,0 +1,174 @@
+<UserControl x:Class="AksesKita.Desktop.Views.MapView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+             Background="#F1F5F9">
+    <Grid Margin="24">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="380"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ===== Filter panel ===== -->
+        <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,16,0" Padding="18">
+            <DockPanel>
+                <Button DockPanel.Dock="Bottom" Style="{StaticResource PrimaryButton}" Content="📍  Laporkan Hambatan"
+                        Command="{Binding NewReportCommand}" Margin="0,12,0,0"/>
+
+                <StackPanel DockPanel.Dock="Top">
+                    <Grid>
+                        <TextBlock Text="Filter Peta GIS" Style="{StaticResource CardTitle}" FontSize="17"/>
+                        <Border Background="#E0F2FE" CornerRadius="10" Padding="10,3" HorizontalAlignment="Right">
+                            <TextBlock FontSize="11.5" FontWeight="SemiBold" Foreground="#0369A1">
+                                <Run Text="{Binding ActiveCount, Mode=OneWay}"/><Run Text=" Hambatan Aktif"/>
+                            </TextBlock>
+                        </Border>
+                    </Grid>
+
+                    <Grid Margin="0,12,0,0">
+                        <TextBox x:Name="MapSearch" Style="{StaticResource FormInput}"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Padding="34,9,11,9"/>
+                        <TextBlock Text="🔍" Margin="12,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"/>
+                        <TextBlock Text="Cari lokasi, judul, atau ID tiket..." Margin="34,0,0,0" VerticalAlignment="Center"
+                                   Foreground="#94A3B8" FontSize="13" IsHitTestVisible="False">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=MapSearch}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+
+                    <TextBlock Text="KATEGORI HAMBATAN" Style="{StaticResource EyebrowText}" Margin="0,16,0,8"/>
+                    <ListBox ItemsSource="{Binding CategoryChips}" SelectedItem="{Binding SelectedCategory}"
+                             BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Margin" Value="0,0,6,6"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <Border x:Name="pill" Background="#EEF2F7" CornerRadius="16" Padding="12,6">
+                                                <TextBlock x:Name="t" Text="{Binding}" FontSize="12" FontWeight="SemiBold" Foreground="#334155"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="pill" Property="Background" Value="{StaticResource Navy}"/>
+                                                    <Setter TargetName="t" Property="Foreground" Value="White"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+
+                    <TextBlock Text="STATUS PENANGANAN" Style="{StaticResource EyebrowText}" Margin="0,10,0,8"/>
+                    <UniformGrid Columns="3">
+                        <RadioButton GroupName="sg" Command="{Binding SetStatusGroupCommand}" CommandParameter="Kritis"
+                                     IsChecked="{Binding StatusGroup, Converter={StaticResource PageToBool}, ConverterParameter=Kritis, Mode=OneWay}">
+                            <RadioButton.Template>
+                                <ControlTemplate TargetType="RadioButton">
+                                    <Border x:Name="b" Background="#FEF2F2" BorderBrush="Transparent" BorderThickness="2" CornerRadius="10" Padding="8,10" Margin="0,0,6,0" Cursor="Hand">
+                                        <StackPanel>
+                                            <TextBlock Text="● Kritis" FontSize="12" FontWeight="SemiBold" Foreground="#B91C1C"/>
+                                            <TextBlock Text="{Binding KritisCount}" FontSize="20" FontWeight="Bold" Foreground="#B91C1C"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsChecked" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#B91C1C"/></Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </RadioButton.Template>
+                        </RadioButton>
+                        <RadioButton GroupName="sg" Command="{Binding SetStatusGroupCommand}" CommandParameter="Proses"
+                                     IsChecked="{Binding StatusGroup, Converter={StaticResource PageToBool}, ConverterParameter=Proses, Mode=OneWay}">
+                            <RadioButton.Template>
+                                <ControlTemplate TargetType="RadioButton">
+                                    <Border x:Name="b" Background="#FFFBEB" BorderBrush="Transparent" BorderThickness="2" CornerRadius="10" Padding="8,10" Margin="0,0,6,0" Cursor="Hand">
+                                        <StackPanel>
+                                            <TextBlock Text="● Proses" FontSize="12" FontWeight="SemiBold" Foreground="#B45309"/>
+                                            <TextBlock Text="{Binding ProsesCount}" FontSize="20" FontWeight="Bold" Foreground="#B45309"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsChecked" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#B45309"/></Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </RadioButton.Template>
+                        </RadioButton>
+                        <RadioButton GroupName="sg" Command="{Binding SetStatusGroupCommand}" CommandParameter="Selesai"
+                                     IsChecked="{Binding StatusGroup, Converter={StaticResource PageToBool}, ConverterParameter=Selesai, Mode=OneWay}">
+                            <RadioButton.Template>
+                                <ControlTemplate TargetType="RadioButton">
+                                    <Border x:Name="b" Background="#F0FDF4" BorderBrush="Transparent" BorderThickness="2" CornerRadius="10" Padding="8,10" Cursor="Hand">
+                                        <StackPanel>
+                                            <TextBlock Text="● Selesai" FontSize="12" FontWeight="SemiBold" Foreground="#15803D"/>
+                                            <TextBlock Text="{Binding SelesaiCount}" FontSize="20" FontWeight="Bold" Foreground="#15803D"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsChecked" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#15803D"/></Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </RadioButton.Template>
+                        </RadioButton>
+                    </UniformGrid>
+
+                    <TextBlock Text="LAPORAN TERDEKAT — URUT PALING MENDESAK" Style="{StaticResource EyebrowText}" Margin="0,16,0,8"/>
+                </StackPanel>
+
+                <ListBox ItemsSource="{Binding Nearby}" SelectedItem="{Binding SelectedReport}" BorderThickness="0"
+                         Background="Transparent" ItemContainerStyle="{StaticResource ListRow}"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Grid>
+                                    <TextBlock Text="{Binding TicketCode}" FontSize="11.5" FontWeight="Bold" Foreground="{StaticResource Ink}"/>
+                                    <Border HorizontalAlignment="Right" CornerRadius="7" Padding="8,2"
+                                            Background="{Binding Status, Converter={StaticResource StatusToTint}}">
+                                        <TextBlock Text="{Binding Status, Converter={StaticResource EnumLabel}}" FontSize="10.5" FontWeight="SemiBold"
+                                                   Foreground="{Binding Status, Converter={StaticResource StatusToBrush}}"/>
+                                    </Border>
+                                </Grid>
+                                <TextBlock Text="{Binding Title}" FontSize="13" FontWeight="SemiBold" Foreground="#334155" TextWrapping="Wrap" Margin="0,4,0,2"/>
+                                <TextBlock Text="{Binding Address}" FontSize="11" Foreground="{StaticResource Muted}" TextWrapping="Wrap"/>
+                                <TextBlock FontSize="11" Foreground="{StaticResource Muted}" Margin="0,4,0,0">
+                                    <Run Text="👍 "/><Run Text="{Binding SupportCount, Mode=OneWay}"/><Run Text=" Dukungan"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <!-- ===== Map ===== -->
+        <Border Grid.Column="1" Style="{StaticResource Card}" Padding="0" ClipToBounds="True">
+            <Grid>
+                <wv2:WebView2 x:Name="mapWebView"/>
+
+                <!-- Fallback shown when the WebView2 runtime is missing -->
+                <Border x:Name="mapFallback" Background="#E2E8F0" Visibility="Collapsed">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="440">
+                        <TextBlock Text="🗺" FontSize="40" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="mapFallbackText" TextAlignment="Center" TextWrapping="Wrap"
+                                   Foreground="#475569" FontSize="13" Margin="0,10,0,0"
+                                   Text="Peta membutuhkan WebView2 Runtime (Microsoft Edge). Pasang 'Evergreen WebView2 Runtime' lalu buka kembali menu ini."/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
