@@ -37,7 +37,6 @@ Proyek ini dikerjakan untuk mata kuliah **PBKK (Kelas D)**, berbasis **.NET (WPF
 10. [Data Contoh](#10-data-contoh)
 11. [Keamanan dan Keterbatasan](#11-keamanan-dan-keterbatasan)
 12. [Kesesuaian dengan PRD](#12-kesesuaian-dengan-prd)
-13. [Pengembangan Lanjutan](#13-pengembangan-lanjutan)
 
 ---
 
@@ -63,7 +62,14 @@ Proyek ini dikerjakan untuk mata kuliah **PBKK (Kelas D)**, berbasis **.NET (WPF
 
 ## 2. Pengguna dan Hak Akses
 
-Saat aplikasi dibuka, pengguna masuk dengan **memilih peran**. Kelima menu tersedia untuk kedua peran; yang berbeda adalah aksi di dalam halamannya.
+Pengguna **masuk dengan email dan kata sandi**. Peran ditentukan oleh akun yang tersimpan di database: warga dapat **mendaftar sendiri** (otomatis menjadi Warga Pelapor), sedangkan akun Admin/Petugas disediakan oleh pengelola. Kelima menu tersedia untuk kedua peran; yang berbeda adalah aksi di dalam halamannya.
+
+**Akun demo** (dibuat otomatis saat pertama dijalankan):
+
+| Peran | Email | Kata sandi |
+|-------|-------|-----------|
+| Admin / Petugas | `admin@akseskita.id` | `Admin123` |
+| Warga Pelapor | `warga@akseskita.id` | `Warga123` |
 
 | Kemampuan | Warga Pelapor | Admin / Petugas |
 |-----------|:-------------:|:---------------:|
@@ -93,6 +99,8 @@ Saat aplikasi dibuka, pengguna masuk dengan **memilih peran**. Kelima menu terse
 
 ### Fitur tambahan
 
+- **Login & registrasi**: akun tersimpan di database, kata sandi disimpan sebagai *hash* **BCrypt** (tidak pernah dalam bentuk asli). Pendaftaran baru memvalidasi nama, format email, email ganda, dan kekuatan kata sandi (minimal 8 karakter, huruf + angka).
+- **Mode gelap / terang**: tombol 🌙 Gelap / ☀ Terang di bilah atas (dan di layar masuk). Pilihan tema diingat untuk pembukaan berikutnya.
 - **Dashboard & Analitik**: kartu statistik, tren pelaporan 6 bulan terakhir, sebaran kategori, antrean prioritas kritis, dan log aktivitas terakhir. Dapat difilter per **7 Hari / 30 Hari / Triwulan**.
 - **Peta Interaktif (GIS)**: penanda laporan di peta Surabaya berwarna sesuai status, filter kategori / status / kata kunci, popup berisi ringkasan, tombol **rute jalan kaki** (membuka Google Maps), dan tombol menuju halaman detail.
 - **Pencarian & filter**: pencarian global di bilah atas (tekan **Enter**) serta filter status, tingkat hambatan, dan "hanya laporan saya" pada daftar laporan.
@@ -105,33 +113,39 @@ Saat aplikasi dibuka, pengguna masuk dengan **memilih peran**. Kelima menu terse
 
 ## 4. Tampilan Aplikasi
 
-> Seluruh tangkapan layar di bawah diambil pada peran **Warga Pelapor**. Pada peran Admin, halaman Daftar menampilkan tombol **Hapus** dan halaman Detail menampilkan panel **Aksi Petugas Verifikator**.
+> Seluruh tangkapan layar di bawah diambil pada peran **Warga Pelapor** dengan **mode gelap**; layar masuk ditampilkan dalam mode terang. Pada peran Admin, halaman Daftar menampilkan tombol **Hapus** dan halaman Detail menampilkan panel **Aksi Petugas Verifikator**.
 
-### 4.1 Dashboard & Analitik
+### 4.1 Layar Masuk
+
+Masuk dengan email dan kata sandi, atau daftar sebagai warga baru. Tombol di pojok kanan atas mengganti mode gelap / terang.
+
+![Layar Masuk](Images/Login.png)
+
+### 4.2 Dashboard & Analitik
 
 Ringkasan kondisi aksesibilitas Surabaya: total laporan, laporan dalam penanganan, selesai, dan yang mendesak; tren bulanan, sebaran kategori, antrean prioritas kritis, dan log aktivitas.
 
 ![Dashboard & Analitik](Images/Dashboard.png)
 
-### 4.2 Peta Interaktif
+### 4.3 Peta Interaktif
 
-Peta Surabaya dengan penanda laporan. Panel kiri berisi pencarian, filter kategori, filter status (Kritis / Proses / Selesai), dan daftar laporan yang diurutkan dari yang paling mendesak. Pada contoh ini pencarian "Gubeng" menyisakan satu laporan.
+Peta Surabaya dengan penanda laporan. Panel kiri berisi pencarian, filter kategori, filter status (Kritis / Proses / Selesai), dan daftar laporan yang diurutkan dari yang paling mendesak. Warna penanda mengikuti status: merah (kritis), oranye (menunggu tinjauan), biru-hijau (sedang diperbaiki), hijau (sudah diperbaiki).
 
 ![Peta Interaktif](Images/Peta.png)
 
-### 4.3 Daftar & Manajemen Laporan
+### 4.4 Daftar & Manajemen Laporan
 
 Daftar seluruh laporan dengan pencarian dan filter status / tingkat hambatan. Setiap baris menampilkan kode tiket, kategori, lokasi, jumlah dukungan, serta lencana status dan tingkat hambatan.
 
 ![Daftar & Manajemen Laporan](Images/Daftar%20Manajemen%20Laporan.png)
 
-### 4.4 Formulir Laporan Baru
+### 4.5 Formulir Laporan Baru
 
 Formulir bertahap: pilih kategori, tingkat hambatan, isi rincian, tentukan lokasi (lokasi cepat atau koordinat manual), unggah foto, dan atur privasi (anonim).
 
 ![Formulir Laporan Baru](Images/Formulir%20Laporan.png)
 
-### 4.5 Detail Laporan
+### 4.6 Detail Laporan
 
 Informasi lengkap satu tiket: banner urgensi dan target SLA, data pelapor, bukti foto, deskripsi dampak, koordinat lokasi, riwayat penanganan, dan tombol dukungan.
 
@@ -143,7 +157,7 @@ Informasi lengkap satu tiket: banner urgensi dan target SLA, data pelapor, bukti
 
 ### Alur Warga Pelapor
 
-1. Buka aplikasi, isi nama, lalu pilih **Masuk sebagai Warga Pelapor**.
+1. Buka aplikasi, pilih **Belum punya akun? Daftar sebagai warga** untuk membuat akun (atau masuk dengan akun demo warga).
 2. Buka menu **Formulir Laporan Baru**, pilih kategori dan tingkat hambatan, isi judul dan deskripsi.
 3. Pilih lokasi (lokasi cepat Surabaya atau isi alamat dan koordinat), tambahkan foto bila ada.
 4. Tekan **Kirim Laporan Hambatan**. Aplikasi membuka halaman detail dan menampilkan **kode tiket**.
@@ -151,7 +165,7 @@ Informasi lengkap satu tiket: banner urgensi dan target SLA, data pelapor, bukti
 
 ### Alur Admin / Petugas
 
-1. Pilih **Masuk sebagai Admin / Petugas**.
+1. Masuk dengan akun admin (`admin@akseskita.id` / `Admin123`).
 2. Pantau **Dashboard**; laporan kritis yang belum ditangani muncul di *Antrean Prioritas Kritis* (tombol **Verifikasi** membuka detailnya).
 3. Di **Detail Laporan**, pada panel *Aksi Petugas Verifikator*, pilih status baru, isi catatan, lalu **Simpan & Kirim Notifikasi Publik**. Perubahan langsung masuk ke riwayat dan log aktivitas dashboard.
 4. Hapus laporan yang tidak valid dari daftar atau halaman detail.
@@ -171,7 +185,7 @@ Informasi lengkap satu tiket: banner urgensi dan target SLA, data pelapor, bukti
 
 - **View**: file `.xaml` hanya berisi tampilan dan *binding*.
 - **ViewModel**: menyimpan state dan command (`CommunityToolkit.Mvvm`: `[ObservableProperty]`, `[RelayCommand]`).
-- **Service**: `IReportService` / `ReportService` menangani seluruh operasi data (tambah, baca, ubah status, hapus, dukungan, log).
+- **Service**: `IReportService` / `ReportService` menangani seluruh operasi data (tambah, baca, ubah status, hapus, dukungan, log); `AuthService` menangani registrasi dan login (BCrypt); `ThemeService` mengganti palet terang/gelap.
 - **Data**: `AksesKitaDbContext` membuat database dan mengisi data awal saat pertama dijalankan.
 
 ### Teknologi
@@ -181,6 +195,7 @@ Informasi lengkap satu tiket: banner urgensi dan target SLA, data pelapor, bukti
 | Bahasa / platform | C# · .NET 8 (`net8.0-windows`) · WPF |
 | Pola arsitektur | MVVM dengan `CommunityToolkit.Mvvm` 8.4 |
 | Database | SQLite via `Microsoft.EntityFrameworkCore.Sqlite` 8.0 |
+| Keamanan kata sandi | `BCrypt.Net-Next` 4.0 |
 | Peta | Leaflet di dalam `WebView2` + ubin peta Esri |
 | Editor | Visual Studio Code (`dotnet` CLI) |
 
@@ -196,10 +211,10 @@ AksesKita/
     ├── Converters.cs               # converter warna / visibilitas / enum
     ├── Formatters.cs               # format waktu, label status, target SLA
     ├── Assets/Map/index.html       # peta Leaflet (Surabaya)
-    ├── Themes/Styles.xaml          # palet warna, kartu, tombol, chip
-    ├── Models/                     # Report, Category, ReportStatusLog, enum
-    ├── Data/                       # AksesKitaDbContext + data awal
-    ├── Services/                   # IReportService, ReportService, sesi pengguna
+    ├── Themes/                     # Light.xaml & Dark.xaml (palet), Styles.xaml
+    ├── Models/                     # AppUser, Report, Category, ReportStatusLog, enum
+    ├── Data/                       # AksesKitaDbContext + data awal & akun demo
+    ├── Services/                   # ReportService, AuthService, ThemeService, sesi
     ├── ViewModels/                 # Main, Login, Dashboard, ReportList,
     │                               # CreateReport, ReportDetail, Map
     └── Views/                      # MainWindow, LoginView, DashboardView,
@@ -213,8 +228,18 @@ AksesKita/
 
 ```mermaid
 erDiagram
+    USER ||--o{ REPORT : "melaporkan"
     CATEGORY ||--o{ REPORT : "mengelompokkan"
     REPORT ||--o{ REPORT_STATUS_LOG : "memiliki riwayat"
+
+    USER {
+        int Id PK
+        string Name
+        string Email UK
+        string PasswordHash
+        string Role
+        datetime CreatedAt
+    }
 
     CATEGORY {
         int Id PK
@@ -226,6 +251,7 @@ erDiagram
         int Id PK
         string TicketCode
         int CategoryId FK
+        int ReporterUserId FK
         string Title
         string Description
         string Severity
@@ -256,6 +282,7 @@ erDiagram
 |------|-------|
 | `SeverityLevel` (tingkat hambatan) | Rendah · Sedang · Kritis |
 | `ReportStatus` (status penanganan) | Baru · Terverifikasi · Dalam Perbaikan · Selesai · Ditolak |
+| `UserRole` (peran akun) | Pelapor · Admin |
 
 **Kategori hambatan awal:** Trotoar & Jalur · Ramp Kursi Roda · Guiding Block · Lift & Eskalator · Toilet Disabilitas · Halte & Transit.
 
@@ -274,6 +301,9 @@ erDiagram
 | Koordinat | Latitude −90 s.d. 90, longitude −180 s.d. 180 (format desimal) |
 | Foto | Opsional, JPG/PNG, maksimal 5 MB |
 | Tingkat hambatan | Wajib; bawaan **Sedang** |
+| Nama akun (daftar) | Minimal 3 karakter |
+| Email akun | Format email valid, belum terdaftar |
+| Kata sandi | Minimal 8 karakter, kombinasi huruf dan angka, konfirmasi harus sama |
 
 Bila ada isian yang tidak valid, pesan penjelasan tampil di formulir dan data yang sudah diketik **tidak hilang**.
 
@@ -305,8 +335,8 @@ Dengan **VS Code**: buka folder `AksesKita`, buka terminal, lalu jalankan perint
 
 ### Menggunakan aplikasi
 
-1. Isi nama (opsional), lalu pilih **Warga Pelapor** atau **Admin / Petugas**.
-2. Jelajahi lima menu di sidebar kiri.
+1. Masuk dengan salah satu [akun demo](#2-pengguna-dan-hak-akses), atau daftar akun warga baru.
+2. Jelajahi lima menu di sidebar kiri; ganti tema lewat tombol **🌙 Gelap / ☀ Terang**.
 3. Tombol **Keluar** di sidebar kiri bawah mengembalikan ke layar masuk.
 
 ### Lokasi data dan mengatur ulang
@@ -315,11 +345,12 @@ Database dan foto yang diunggah disimpan di samping file aplikasi:
 
 ```
 AksesKita.Desktop/bin/Debug/net8.0-windows/
-├── akseskita.db*      # database SQLite
-└── Uploads/           # foto bukti yang dilampirkan
+├── akseskita.db*      # database SQLite (laporan, akun, riwayat)
+├── Uploads/           # foto bukti yang dilampirkan
+└── theme.txt          # pilihan tema terakhir
 ```
 
-Untuk **mengembalikan data awal**, tutup aplikasi lalu hapus berkas `akseskita.db*` dan folder `Uploads` di lokasi tersebut. Saat dijalankan lagi, database dibuat ulang dan diisi data contoh.
+Untuk **mengembalikan data awal**, tutup aplikasi lalu hapus berkas `akseskita.db*` dan folder `Uploads` di lokasi tersebut. Akun yang didaftarkan juga ikut terhapus; akun demo dibuat ulang. Saat dijalankan lagi, database dibuat ulang dan diisi data contoh.
 
 ### Pemecahan masalah
 
@@ -342,15 +373,16 @@ Pada eksekusi pertama, database diisi otomatis dengan **6 kategori** dan **18 la
 
 **Yang sudah diterapkan**
 
-- Akses data memakai **Entity Framework Core**, yaitu query berparameter, sehingga aman dari SQL injection.
+- **Autentikasi**: login dengan email dan kata sandi; kata sandi disimpan sebagai *hash* **BCrypt** (dengan *salt*), tidak pernah dalam bentuk asli. Pesan gagal login tidak membedakan "email tidak ada" dan "kata sandi salah".
+- **Akses berbasis peran**: peran berasal dari akun di database. Registrasi mandiri selalu membuat akun Warga, sehingga tidak ada yang bisa mendaftar sebagai Admin. Fitur admin (ubah status, hapus) tidak ditampilkan pada peran Warga.
+- Akses data memakai **Entity Framework Core**, yaitu query berparameter, sehingga aman dari SQL injection. Email akun bersifat unik di database.
 - Validasi isian formulir, serta pembatasan jenis (JPG/PNG) dan ukuran (5 MB) foto.
 - Opsi **laporan anonim**: nama pelapor ditampilkan sebagai "Anonim (Warga Peduli)".
-- Fitur admin (ubah status, hapus) tidak ditampilkan pada peran Warga.
 
 **Keterbatasan yang perlu diketahui**
 
-- **Belum ada autentikasi sungguhan.** Peran dipilih pada layar masuk tanpa kata sandi, sehingga pemisahan peran bersifat demonstrasi alur kerja, bukan kontrol keamanan. Registrasi akun dan penyimpanan kata sandi ter-*hash* belum dibuat.
-- Pembatasan laju pengiriman laporan (anti-spam) belum ada.
+- Kata sandi akun demo tercantum di README dan layar masuk agar mudah diuji. Untuk penggunaan nyata, akun demo harus dihapus atau kata sandinya diganti.
+- Belum ada fitur lupa/ganti kata sandi, penguncian setelah gagal login berulang, maupun pembatasan laju pengiriman laporan (anti-spam).
 - Aplikasi berjalan lokal dengan satu database di komputer pengguna, belum multi-pengguna lewat jaringan.
 - Dukungan "+1" hanya dibatasi satu kali per laporan selama aplikasi terbuka, belum disimpan per pengguna.
 
@@ -362,7 +394,7 @@ Rincian status terhadap kebutuhan fungsional pada PRD:
 
 | ID | Fitur PRD | Status | Keterangan |
 |----|-----------|:------:|------------|
-| F-01 | Registrasi dan login | 🟡 Sebagian | Pemilihan peran saat masuk; belum ada registrasi dan kata sandi |
+| F-01 | Registrasi dan login | ✅ Selesai | Email + kata sandi ter-*hash* BCrypt, peran dari akun, registrasi warga |
 | F-02 | Buat laporan | ✅ Selesai | Judul, kategori, tingkat, deskripsi, lokasi, foto, anonim |
 | F-03 | Daftar laporan | 🟡 Sebagian | Daftar dengan pencarian dan filter; belum ada *pagination* (daftar dapat di-*scroll*) |
 | F-04 | Detail laporan | ✅ Selesai | Info lengkap, foto, riwayat status |
@@ -372,9 +404,9 @@ Rincian status terhadap kebutuhan fungsional pada PRD:
 | F-08 | Dashboard | ✅ Selesai | Kartu statistik, tren, sebaran kategori, dari database |
 | F-09 | Pelacakan dengan kode | 🟡 Sebagian | Pencarian kode tiket tersedia setelah masuk; belum ada pelacakan tanpa login |
 | F-10 | Peta lokasi | ✅ Selesai | Peta Surabaya dengan penanda, filter, dan rute |
-| F-11 | Dukungan laporan | 🟡 Sebagian | Tombol +1 berfungsi; belum disimpan per pengguna |
+| F-11 | Dukungan laporan | 🟡 Sebagian | Tombol +1 berfungsi; belum disimpan per akun |
 | F-12 | Ekspor data | ✅ Selesai | Ekspor CSV |
-| F-13 | Mode gelap/terang | ❌ Belum | Sebagai gantinya tersedia pengaturan **Ukuran** tampilan |
+| F-13 | Mode gelap/terang | ✅ Selesai | Tombol tema di bilah atas dan layar masuk, pilihan diingat; ditambah pengaturan **Ukuran** tampilan |
 | F-14 | Log aktivitas | ✅ Selesai | Riwayat perubahan status dan nama pengubahnya |
 
 
