@@ -60,7 +60,7 @@ public partial class ReportListViewModel : ObservableObject
         if (SeverityFilter != "Semua" && Enum.TryParse<SeverityLevel>(SeverityFilter, out var sv))
             q = q.Where(r => r.Severity == sv);
         if (OnlyMine)
-            q = q.Where(r => r.ReporterName == _nav.Session.UserName);
+            q = q.Where(r => r.ReporterUserId == _nav.Session.UserId);
 
         var list = q.ToList();
         Reports = new ObservableCollection<Report>(list);

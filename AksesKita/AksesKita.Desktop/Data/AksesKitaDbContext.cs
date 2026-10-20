@@ -12,13 +12,20 @@ public class AksesKitaDbContext : DbContext
     public DbSet<Report> Reports => Set<Report>();
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<ReportStatusLog> ReportStatusLogs => Set<ReportStatusLog>();
+    public DbSet<AppUser> Users => Set<AppUser>();
 
     // Store the database next to the executable so it is stable across runs.
     private static readonly string DbPath =
         Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "akseskita.db");
 
     // Bump this when the schema or the seed data changes; the dev database is rebuilt once.
-    private const string SchemaVersion = "v5-surabaya";
+    private const string SchemaVersion = "v6-auth";
+
+    // Demo accounts created on first run (passwords are stored only as BCrypt hashes).
+    public const string DemoAdminEmail = "admin@akseskita.id";
+    public const string DemoAdminPassword = "Admin123";
+    public const string DemoWargaEmail = "warga@akseskita.id";
+    public const string DemoWargaPassword = "Warga123";
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -29,6 +36,7 @@ public class AksesKitaDbContext : DbContext
     {
         // Image uploads are stored as a single file path (Report.ImagePath).
         modelBuilder.Entity<Report>().Ignore(r => r.ImageUrls);
+        modelBuilder.Entity<AppUser>().HasIndex(u => u.Email).IsUnique();
     }
 
     /// <summary>Creates the database on first run and fills it with starter data for Surabaya.</summary>
@@ -61,6 +69,17 @@ public class AksesKitaDbContext : DbContext
             db.SaveChanges();
         }
 
+        if (!db.Users.Any())
+        {
+            db.Users.AddRange(
+                new AppUser { Name = "Petugas Bina Marga", Email = DemoAdminEmail, Role = UserRole.Admin,
+                              PasswordHash = BCrypt.Net.BCrypt.HashPassword(DemoAdminPassword) },
+                new AppUser { Name = "Rani W.", Email = DemoWargaEmail, Role = UserRole.Pelapor,
+                              PasswordHash = BCrypt.Net.BCrypt.HashPassword(DemoWargaPassword) }
+            );
+            db.SaveChanges();
+        }
+
         if (!db.Reports.Any())
         {
             SeedReports(db);
@@ -69,6 +88,7 @@ public class AksesKitaDbContext : DbContext
 
     private static void SeedReports(AksesKitaDbContext db)
     {
+        var demoWargaId = db.Users.First(u => u.Email == DemoWargaEmail).Id;
         var cats = db.Categories.ToList();
         int C(string prefix) => cats.First(c => c.Name.StartsWith(prefix)).Id;
         var now = DateTime.Now;
@@ -103,6 +123,9 @@ public class AksesKitaDbContext : DbContext
             R("Trotoar", "Trotoar Terputus Tiang Listrik", "Tiang listrik di tengah trotoar menyisakan lebar kurang dari 60 cm sehingga kursi roda tidak lewat.", SeverityLevel.Sedang, ReportStatus.Baru, "Jl. Raya Darmo (dekat Taman Bungkul sisi selatan)", -7.2940, 112.7400, "Budi S.", false, 18, 12),
             R("Halte", "Halte Tanpa Jalur Ramp", "Halte hanya bisa diakses lewat tangga sehingga tidak dapat dipakai pengguna kursi roda.", SeverityLevel.Rendah, ReportStatus.Selesai, "Halte Monumen Kapal Selam, Jl. Pemuda", -7.2654, 112.7503, "Mahasiswa Unair", false, 15, 1300),
         };
+
+        // The demo citizen account owns the reports filed under her name.
+        foreach (var r in seeds.Where(s => s.ReporterName == "Rani W.")) r.ReporterUserId = demoWargaId;
 
         db.Reports.AddRange(seeds);
         db.SaveChanges();

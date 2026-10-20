@@ -15,6 +15,9 @@ public partial class MainViewModel : ObservableObject, INavigator
     [ObservableProperty] private bool _isLoggedIn;
     [ObservableProperty] private string _searchText = string.Empty;
     [ObservableProperty] private double _uiScale = 1.0;
+    [ObservableProperty, NotifyPropertyChangedFor(nameof(ThemeLabel))] private bool _isDark = ThemeService.IsDark;
+
+    public string ThemeLabel => IsDark ? "☀  Terang" : "🌙  Gelap";
 
     public AppSession Session { get; } = new();
 
@@ -29,7 +32,7 @@ public partial class MainViewModel : ObservableObject, INavigator
 
     public MainViewModel(IReportService service)
     {
-        LoginVM = new LoginViewModel(this);
+        LoginVM = new LoginViewModel(this, new AuthService());
         DashboardVM = new DashboardViewModel(service, this);
         ReportListVM = new ReportListViewModel(service, this);
         CreateReportVM = new CreateReportViewModel(service, this);
@@ -38,11 +41,14 @@ public partial class MainViewModel : ObservableObject, INavigator
         _currentView = LoginVM;
     }
 
-    public void Login(string name, UserRole role)
+    public void Login(AppUser user)
     {
-        Session.UserName = string.IsNullOrWhiteSpace(name) ? (role == UserRole.Admin ? "Admin" : "Warga") : name.Trim();
-        Session.Role = role;
+        Session.UserId = user.Id;
+        Session.UserName = user.Name;
+        Session.Email = user.Email;
+        Session.Role = user.Role;
         IsLoggedIn = true;
+        LoginVM.Reset();
         Navigate("Dashboard");
     }
 
@@ -50,11 +56,19 @@ public partial class MainViewModel : ObservableObject, INavigator
     private void Logout()
     {
         IsLoggedIn = false;
-        Session.UserName = string.Empty;
+        Session.UserId = 0;
+        Session.UserName = Session.Email = string.Empty;
         SearchText = string.Empty;
-        LoginVM.Name = string.Empty;
+        LoginVM.Reset();
         CurrentPage = "Login";
         CurrentView = LoginVM;
+    }
+
+    [RelayCommand]
+    private void ToggleTheme()
+    {
+        ThemeService.Apply(!ThemeService.IsDark);
+        IsDark = ThemeService.IsDark;
     }
 
     /// <summary>Cycles through three text/UI sizes (accessibility option from the design).</summary>

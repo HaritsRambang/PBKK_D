@@ -20,6 +20,8 @@ public class Report
     public double Latitude { get; set; }
     public double Longitude { get; set; }
 
+    /// <summary>Account that submitted the report (null for seeded/legacy rows without an account).</summary>
+    public int? ReporterUserId { get; set; }
     public string? ReporterName { get; set; }
     public bool IsAnonymous { get; set; }
     public int SupportCount { get; set; } = 0;

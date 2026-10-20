@@ -23,6 +23,9 @@ public partial class App : Application
             args.Handled = true;
         };
 
+        // Restore the last chosen light/dark theme before any window is shown.
+        ThemeService.LoadSaved();
+
         // Create the SQLite database and seed starter data on first run.
         AksesKitaDbContext.Initialize();
 

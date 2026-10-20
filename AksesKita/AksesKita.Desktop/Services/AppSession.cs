@@ -3,10 +3,12 @@ using AksesKita.Desktop.Models;
 
 namespace AksesKita.Desktop.Services;
 
-/// <summary>Holds the signed-in user for the current run (role-based, no password for the demo).</summary>
+/// <summary>Holds the account that is signed in for the current run.</summary>
 public partial class AppSession : ObservableObject
 {
+    [ObservableProperty] private int _userId;
     [ObservableProperty] private string _userName = string.Empty;
+    [ObservableProperty] private string _email = string.Empty;
     [ObservableProperty] private UserRole _role = UserRole.Pelapor;
 
     public bool IsAdmin => Role == UserRole.Admin;

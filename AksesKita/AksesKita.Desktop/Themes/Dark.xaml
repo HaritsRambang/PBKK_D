@@ -1,0 +1,26 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Dark palette. Keys must match Light.xaml. -->
+    <SolidColorBrush x:Key="PageBg" Color="#0B1220"/>
+    <SolidColorBrush x:Key="Surface" Color="#111A2E"/>
+    <SolidColorBrush x:Key="SoftBg" Color="#1A2540"/>
+    <SolidColorBrush x:Key="Hover" Color="#22304F"/>
+    <SolidColorBrush x:Key="Selected" Color="#1E3A5F"/>
+    <SolidColorBrush x:Key="Track" Color="#25324D"/>
+    <SolidColorBrush x:Key="Line" Color="#263552"/>
+    <SolidColorBrush x:Key="LineStrong" Color="#34466B"/>
+    <SolidColorBrush x:Key="InfoBg" Color="#12304A"/>
+
+    <SolidColorBrush x:Key="Ink" Color="#E5ECF6"/>
+    <SolidColorBrush x:Key="Body" Color="#CBD5E1"/>
+    <SolidColorBrush x:Key="Subtle" Color="#A8B3C7"/>
+    <SolidColorBrush x:Key="Muted" Color="#94A3B8"/>
+    <SolidColorBrush x:Key="Faint" Color="#6B7A93"/>
+    <SolidColorBrush x:Key="Accent" Color="#A5B4FC"/>
+    <SolidColorBrush x:Key="AccentText" Color="#7DD3FC"/>
+
+    <SolidColorBrush x:Key="Navy" Color="#1D4ED8"/>
+    <SolidColorBrush x:Key="NavyHover" Color="#2563EB"/>
+    <SolidColorBrush x:Key="Teal" Color="#0E9AA7"/>
+    <SolidColorBrush x:Key="LoginBg" Color="#060B16"/>
+</ResourceDictionary>

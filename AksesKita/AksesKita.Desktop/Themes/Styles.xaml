@@ -2,6 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:AksesKita.Desktop">
 
+    <!-- Colours come from Themes/Light.xaml or Themes/Dark.xaml and are referenced with
+         DynamicResource so the theme can be switched while the app is running. -->
+
     <!-- ===== Converters ===== -->
     <local:PageToBoolConverter x:Key="PageToBool"/>
     <local:SeverityToBrushConverter x:Key="SeverityToBrush"/>
@@ -13,19 +16,64 @@
     <local:EnumLabelConverter x:Key="EnumLabel"/>
     <local:FileExistsToVisibilityConverter x:Key="FileExistsToVis"/>
 
-    <!-- ===== Palette (must stay above any style that references it with StaticResource) ===== -->
-    <Color x:Key="NavyColor">#FF0F2A43</Color>
-    <SolidColorBrush x:Key="Navy" Color="#0F2A43"/>
-    <SolidColorBrush x:Key="Ink" Color="#0F172A"/>
-    <SolidColorBrush x:Key="Muted" Color="#64748B"/>
-    <SolidColorBrush x:Key="Line" Color="#E2E8F0"/>
-    <SolidColorBrush x:Key="PageBg" Color="#F1F5F9"/>
-    <SolidColorBrush x:Key="Teal" Color="#0E7490"/>
-    <SolidColorBrush x:Key="Surface" Color="#FFFFFF"/>
+    <!-- ===== Card ===== -->
+    <Style x:Key="Card" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Surface}"/>
+        <Setter Property="CornerRadius" Value="14"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Line}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="20"/>
+    </Style>
+
+    <!-- ===== Text ===== -->
+    <Style x:Key="CardTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+    </Style>
+
+    <Style x:Key="CardSub" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="{DynamicResource Muted}"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+
+    <Style x:Key="EyebrowText" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Muted}"/>
+    </Style>
+
+    <!-- ===== Sidebar nav item (RadioButton styled as pill) ===== -->
+    <Style x:Key="NavItem" TargetType="RadioButton">
+        <Setter Property="Foreground" Value="{DynamicResource Body}"/>
+        <Setter Property="FontSize" Value="13.5"/>
+        <Setter Property="Margin" Value="0,2"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="pill" Background="Transparent" CornerRadius="10" Padding="12,11">
+                        <ContentPresenter VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="pill" Property="Background" Value="{DynamicResource Hover}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="pill" Property="Background" Value="{DynamicResource Navy}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <!-- ===== Pill-shaped filter chip (RadioButton) ===== -->
     <Style x:Key="Chip" TargetType="RadioButton">
-        <Setter Property="Foreground" Value="#334155"/>
+        <Setter Property="Foreground" Value="{DynamicResource Body}"/>
         <Setter Property="FontSize" Value="12.5"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Margin" Value="0,0,8,8"/>
@@ -33,15 +81,15 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Border x:Name="pill" Background="#EEF2F7" CornerRadius="18" Padding="14,7">
+                    <Border x:Name="pill" Background="{DynamicResource Hover}" CornerRadius="18" Padding="14,7">
                         <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="pill" Property="Background" Value="#E2E8F0"/>
+                            <Setter TargetName="pill" Property="Background" Value="{DynamicResource Track}"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="pill" Property="Background" Value="{StaticResource Navy}"/>
+                            <Setter TargetName="pill" Property="Background" Value="{DynamicResource Navy}"/>
                             <Setter Property="Foreground" Value="White"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -54,21 +102,21 @@
     <Style x:Key="SelectCard" TargetType="ListBoxItem">
         <Setter Property="Margin" Value="0,0,10,10"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Foreground" Value="#334155"/>
+        <Setter Property="Foreground" Value="{DynamicResource Body}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="card" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1.5"
+                    <Border x:Name="card" Background="{DynamicResource SoftBg}" BorderBrush="{DynamicResource Line}" BorderThickness="1.5"
                             CornerRadius="12" Padding="14,12">
                         <ContentPresenter/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="card" Property="BorderBrush" Value="#94A3B8"/>
+                            <Setter TargetName="card" Property="BorderBrush" Value="{DynamicResource Faint}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="card" Property="Background" Value="#E0F2FE"/>
-                            <Setter TargetName="card" Property="BorderBrush" Value="{StaticResource Navy}"/>
+                            <Setter TargetName="card" Property="Background" Value="{DynamicResource Selected}"/>
+                            <Setter TargetName="card" Property="BorderBrush" Value="{DynamicResource Navy}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -83,53 +131,17 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="row" Background="White" BorderBrush="#E2E8F0" BorderThickness="1.5"
+                    <Border x:Name="row" Background="{DynamicResource Surface}" BorderBrush="{DynamicResource Line}" BorderThickness="1.5"
                             CornerRadius="12" Padding="14,12">
                         <ContentPresenter/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="row" Property="BorderBrush" Value="#94A3B8"/>
+                            <Setter TargetName="row" Property="BorderBrush" Value="{DynamicResource Faint}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="row" Property="BorderBrush" Value="{StaticResource Navy}"/>
-                            <Setter TargetName="row" Property="Background" Value="#F0F9FF"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!-- ===== Card ===== -->
-    <Style x:Key="Card" TargetType="Border">
-        <Setter Property="Background" Value="White"/>
-        <Setter Property="CornerRadius" Value="14"/>
-        <Setter Property="BorderBrush" Value="{StaticResource Line}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Padding" Value="20"/>
-    </Style>
-
-    <!-- ===== Sidebar nav item (RadioButton styled as pill) ===== -->
-    <Style x:Key="NavItem" TargetType="RadioButton">
-        <Setter Property="Foreground" Value="#334155"/>
-        <Setter Property="FontSize" Value="13.5"/>
-        <Setter Property="Margin" Value="0,2"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="RadioButton">
-                    <Border x:Name="pill" Background="Transparent" CornerRadius="10" Padding="12,11">
-                        <ContentPresenter VerticalAlignment="Center"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="pill" Property="Background" Value="#EEF2F7"/>
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="pill" Property="Background" Value="{StaticResource Navy}"/>
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter TargetName="row" Property="BorderBrush" Value="{DynamicResource Navy}"/>
+                            <Setter TargetName="row" Property="Background" Value="{DynamicResource Selected}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -139,7 +151,7 @@
 
     <!-- ===== Primary button ===== -->
     <Style x:Key="PrimaryButton" TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource Navy}"/>
+        <Setter Property="Background" Value="{DynamicResource Navy}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Padding" Value="18,11"/>
@@ -154,7 +166,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="b" Property="Background" Value="#17395C"/>
+                            <Setter TargetName="b" Property="Background" Value="{DynamicResource NavyHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="b" Property="Opacity" Value="0.6"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -164,8 +179,8 @@
 
     <!-- ===== Secondary (outline) button ===== -->
     <Style x:Key="GhostButton" TargetType="Button">
-        <Setter Property="Background" Value="White"/>
-        <Setter Property="Foreground" Value="{StaticResource Ink}"/>
+        <Setter Property="Background" Value="{DynamicResource Surface}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Padding" Value="16,9"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -173,13 +188,13 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="b" Background="{TemplateBinding Background}" CornerRadius="10"
-                            BorderBrush="{StaticResource Line}" BorderThickness="1"
+                            BorderBrush="{DynamicResource Line}" BorderThickness="1"
                             Padding="{TemplateBinding Padding}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="b" Property="Background" Value="#F8FAFC"/>
+                            <Setter TargetName="b" Property="Background" Value="{DynamicResource SoftBg}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -187,41 +202,65 @@
         </Setter>
     </Style>
 
-    <!-- ===== Card heading ===== -->
-    <Style x:Key="CardTitle" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="{StaticResource Ink}"/>
+    <!-- ===== Link-style button ===== -->
+    <Style x:Key="LinkButton" TargetType="Button">
+        <Setter Property="Foreground" Value="{DynamicResource AccentText}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter HorizontalAlignment="Center"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
-    <Style x:Key="CardSub" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="12"/>
-        <Setter Property="Foreground" Value="{StaticResource Muted}"/>
-        <Setter Property="TextWrapping" Value="Wrap"/>
-    </Style>
-
-    <Style x:Key="EyebrowText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="11"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="{StaticResource Muted}"/>
-    </Style>
-
-    <!-- ===== Form text input ===== -->
+    <!-- ===== Form inputs ===== -->
     <Style x:Key="FormInput" TargetType="TextBox">
         <Setter Property="Padding" Value="11,9"/>
-        <Setter Property="BorderBrush" Value="#CBD5E1"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource Ink}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource LineStrong}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FontSize" Value="13.5"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
-                    <Border Background="White" CornerRadius="9"
+                    <Border Background="{DynamicResource Surface}" CornerRadius="9"
                             BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                         <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style x:Key="FormPassword" TargetType="PasswordBox">
+        <Setter Property="Padding" Value="11,9"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource Ink}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource LineStrong}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontSize" Value="13.5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="PasswordBox">
+                    <Border Background="{DynamicResource Surface}" CornerRadius="9"
+                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ComboBox keeps the system (light) chrome in both themes, so its text stays dark. -->
+    <Style TargetType="ComboBox">
+        <Setter Property="Foreground" Value="#0F172A"/>
+    </Style>
+    <Style TargetType="ComboBoxItem">
+        <Setter Property="Foreground" Value="#0F172A"/>
     </Style>
 
 </ResourceDictionary>

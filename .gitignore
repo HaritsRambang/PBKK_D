@@ -21,3 +21,12 @@
 *.log
 *.tmp
 *.cache
+
+# Local runtime data of the apps (database, uploaded photos, error logs)
+*.db
+*.db-shm
+*.db-wal
+**/Uploads/
+
+# Stray temporary clone/workspace folders
+_tmp_repo/

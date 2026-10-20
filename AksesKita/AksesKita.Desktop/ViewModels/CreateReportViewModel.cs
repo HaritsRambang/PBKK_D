@@ -167,6 +167,7 @@ public partial class CreateReportViewModel : ObservableObject
             Latitude = lat,
             Longitude = lng,
             ImagePath = ImagePath,
+            ReporterUserId = _nav.Session.UserId,
             ReporterName = _nav.Session.UserName
         };
 

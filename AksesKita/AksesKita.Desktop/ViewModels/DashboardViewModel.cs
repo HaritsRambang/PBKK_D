@@ -82,7 +82,7 @@ public partial class DashboardViewModel : ObservableObject
     {
         Categories.Clear();
         var total = _periodReports.Count == 0 ? 1 : _periodReports.Count;
-        var palette = new[] { "#0F2A43", "#0E7490", "#6366F1", "#38BDF8", "#F59E0B", "#14B8A6" };
+        var palette = new[] { "#1D4ED8", "#0E7490", "#6366F1", "#38BDF8", "#F59E0B", "#14B8A6" };
         var grouped = _periodReports
             .GroupBy(r => r.Category?.Name ?? "Lainnya")
             .Select(g => new { Name = g.Key, Count = g.Count() })
