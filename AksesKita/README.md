@@ -16,9 +16,9 @@ Proyek ini dikerjakan untuk mata kuliah **PBKK (Kelas D)**, berbasis **.NET (WPF
 
 | No | Nama | NRP |
 |----|------|-----|
-| 1 | _[isi nama]_ | _[isi NRP]_ |
-| 2 | _[isi nama]_ | _[isi NRP]_ |
-| 3 | _[isi nama]_ | _[isi NRP]_ |
+| 1 | Leyan Harits R W | 5025231288 |
+| 2 | Achmad Najwa M | 5025231265 |
+| 3 | Derryell Josua E P | 5025241175 |
 
 <!-- Hapus baris yang tidak diperlukan jika anggota kurang dari 3 orang. -->
 
