@@ -1,4 +1,4 @@
-# Meet 6 - Student Registration Manager dengan SQL Server dan ADO.NET
+# Meet 6 - Student Registration Manager dengan SQL Server dan WPF
 
 **Nama**  : Leyan Harits R W  
 **NRP**   : 5025231288
