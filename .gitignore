@@ -26,6 +26,9 @@
 *.db
 *.db-shm
 *.db-wal
+*.mdf
+*.ldf
+*.ndf
 **/Uploads/
 
 # Stray temporary clone/workspace folders
